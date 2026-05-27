@@ -11,4 +11,5 @@
 /.kotlin/
 
 ### Mac OS ###
-.DS_Store
+.DS_Store.gradle/
+build/
