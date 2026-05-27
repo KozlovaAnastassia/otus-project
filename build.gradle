@@ -1,0 +1,16 @@
+group = "ru.otus.otuskotlin"
+version = "0.0.1"
+
+tasks.register("clean") {
+    group = "build"
+    description = "Deletes build directories"
+    dependsOn(gradle.includedBuild("learn").task(":m1l1-first:clean"))
+    dependsOn(gradle.includedBuild("project").task(":app:clean"))
+}
+
+tasks.register("buildAll") {
+    group = "build"
+    description = "Build all composite builds"
+    dependsOn(gradle.includedBuild("learn").task(":m1l1-first:build"))
+    dependsOn(gradle.includedBuild("project").task(":app:build"))
+}

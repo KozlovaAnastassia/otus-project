@@ -1,13 +1,16 @@
+rootProject.name = "otus-project"
+
 pluginManagement {
-    val kotlinVersion: String by settings
-    plugins {
-        kotlin("jvm") version kotlinVersion
+    repositories {
+        gradlePluginPortal()
+        mavenCentral()
     }
 }
 
 plugins {
     id("org.gradle.toolchains.foojay-resolver-convention") version "0.8.0"
 }
-rootProject.name = "otus-project"
 
-include(":m1l1-first")
+includeBuild("build-plugins")
+includeBuild("learn")
+includeBuild("project")
