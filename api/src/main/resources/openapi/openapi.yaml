@@ -1,0 +1,149 @@
+openapi: 3.0.3
+info:
+  title: Meme Service API
+  version: 1.0.0
+  description: API для поиска и публикации мемов
+
+paths:
+  /api/v1/memes:
+    get:
+      tags:
+        - memes
+      summary: get all memes
+      operationId: getAllMemes
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MemeListResponse'
+    post:
+      tags:
+        - memes
+      summary: Create new meme
+      operationId: createMeme
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateMemeRequest'
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MemeResponse'
+
+  /api/v1/memes/{id}:
+    get:
+      tags:
+        - memes
+      summary: Get meme from ID
+      operationId: getMemeById
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MemeResponse'
+    put:
+      tags:
+        - memes
+      summary: Обновить мем
+      operationId: updateMeme
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateMemeRequest'
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MemeResponse'
+    delete:
+      tags:
+        - memes
+      summary: Delete meme
+      operationId: deleteMeme
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Success
+
+components:
+  schemas:
+    CreateMemeRequest:
+      type: object
+      properties:
+        title:
+          type: string
+        tags:
+          type: array
+          items:
+            type: string
+        image:
+          type: string
+      required:
+        - title
+
+    UpdateMemeRequest:
+      type: object
+      properties:
+        title:
+          type: string
+        tags:
+          type: array
+          items:
+            type: string
+      required:
+        - title
+
+    MemeResponse:
+      type: object
+      properties:
+        id:
+          type: string
+        title:
+          type: string
+        tags:
+          type: array
+          items:
+            type: string
+        imageUrl:
+          type: string
+        createdAt:
+          type: string
+          format: date-time
+
+    MemeListResponse:
+      type: object
+      properties:
+        memes:
+          type: array
+          items:
+            $ref: '#/components/schemas/MemeResponse'

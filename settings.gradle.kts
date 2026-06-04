@@ -11,6 +11,9 @@ plugins {
     id("org.gradle.toolchains.foojay-resolver-convention") version "0.8.0"
 }
 
+include(":api")
+include(":common")
+
 includeBuild("build-plugins")
 includeBuild("learn")
 includeBuild("project")
