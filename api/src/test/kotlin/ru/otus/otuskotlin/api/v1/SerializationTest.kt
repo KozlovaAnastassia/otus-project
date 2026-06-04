@@ -85,7 +85,7 @@ class SerializationTest {
         // Given
         val now = OffsetDateTime.now()
         val original = MemeResponse(
-            id = 123L,
+            id = "123",
             title = "Ответный мем",
             tags = listOf("ответ", "тест"),
             imageUrl = "/uploads/meme123.jpg",
