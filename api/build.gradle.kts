@@ -28,7 +28,7 @@ openApiGenerate {
     packageName.set("ru.otus.otuskotlin.api.v1")
     modelPackage.set("ru.otus.otuskotlin.api.v1.models")
     inputSpec.set("$projectDir/src/main/resources/openapi/openapi.yaml")
-    outputDir.set("$buildDir/generate-resources")
+    outputDir.set("$buildDir/generate-resources/v1")
 
     configOptions.set(mapOf(
         "serializationLibrary" to "jackson"
@@ -37,12 +37,14 @@ openApiGenerate {
     globalProperties.apply {
         put("models", "")
         put("modelDocs", "false")
+        put("apis", "false")
+        put("apiTests", "false")
     }
 }
 
 sourceSets {
     main {
-        kotlin.srcDir("$buildDir/generate-resources/src/main/kotlin")
+        kotlin.srcDir("$buildDir/generate-resources/v1/src/main/kotlin")
     }
 }
 

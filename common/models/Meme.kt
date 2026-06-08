@@ -1,21 +1,26 @@
 package ru.otus.otuskotlin.common.models
 
-import java.time.Instant
+import kotlinx.datetime.Instant
 
 data class Meme(
-    val id: MemeId = MemeId.NONE,
-    val title: String = "",
-    val tags: List<String> = emptyList(),
-    val imageUrl: String = "",
-    val createdAt: Instant = Instant.now(),
-    val authorId: String = ""
-)
+    var id: MemeId = MemeId.NONE,
+    var title: String = "",
+    var tags: List<String> = emptyList(),
+    var image: String = "",
+    var imageUrl: String = "",
+    var createdAt: Instant = Instant.NONE,
+    var lock: MemeLock = MemeLock.NONE
+    var authorId: MemeUserId = MemeUserId.NONE,
+    val permissionsClient: MutableSet<MemePermissionClient> = mutableSetOf(),
+    var visibility: MemeVisibility = MemeVisibility.NONE,
+) {
+    fun deepCopy(): Meme = copy(
+        tags = tags.toList(),
+    )
 
-@JvmInline
-value class MemeId(val value: String) {
+    fun isEmpty(): Boolean = this == NONE
+
     companion object {
-        val NONE = MemeId("")
+        val NONE = Meme()
     }
-
-    override fun toString(): String = value
 }

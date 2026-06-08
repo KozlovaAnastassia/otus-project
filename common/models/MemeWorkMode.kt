@@ -1,5 +1,5 @@
 package ru.otus.otuskotlin.common.models
 
-enum class WorkMode {
+enum class MemeWorkMode {
     PROD, TEST, STUB
 }

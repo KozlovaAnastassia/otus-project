@@ -8,8 +8,7 @@ import com.fasterxml.jackson.module.kotlin.readValue
 import org.junit.jupiter.api.Assertions.*
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
-import ru.otus.otuskotlin.api.v1.models.CreateMemeRequest
-import ru.otus.otuskotlin.api.v1.models.MemeResponse
+import ru.otus.otuskotlin.api.v1.models.*
 import java.time.OffsetDateTime
 
 class SerializationTest {
@@ -25,66 +24,131 @@ class SerializationTest {
     }
 
     @Test
-    fun `should serialize and deserialize CreateMemeRequest with all fields`() {
-        // Given
-        val original = CreateMemeRequest(
-            title = "Тестовый мем",
-            tags = listOf("кот", "смешное", "мем"),
-            image = "base64EncodedImageString"
+    fun `should serialize and deserialize MemeCreateRequest with all fields`() {
+        val original = MemeCreateRequest(
+            requestType = "create",
+            meme = MemeCreateObject(
+                title = "Тестовый мем",
+                tags = listOf("кот", "смешное", "мем"),
+                image = "base64EncodedImageString"
+            )
         )
 
-        // When
         val json = objectMapper.writeValueAsString(original)
-        val deserialized = objectMapper.readValue<CreateMemeRequest>(json)
+        val deserialized = objectMapper.readValue<MemeCreateRequest>(json)
 
-        // Then
-        assertEquals(original.title, deserialized.title, "Title should match")
-        assertEquals(original.tags, deserialized.tags, "Tags should match")
-        assertEquals(original.image, deserialized.image, "Image should match")
+        assertEquals(original.requestType, deserialized.requestType)
+        assertEquals(original.meme?.title, deserialized.meme?.title)
+        assertEquals(original.meme?.tags, deserialized.meme?.tags)
+        assertEquals(original.meme?.image, deserialized.meme?.image)
     }
 
     @Test
-    fun `should serialize and deserialize CreateMemeRequest with only required fields`() {
-        // Given
-        val original = CreateMemeRequest(
-            title = "Минимальный мем",
-            tags = null,
-            image = null
+    fun `should serialize and deserialize MemeCreateRequest with only required fields`() {
+        val original = MemeCreateRequest(
+            requestType = "create",
+            meme = MemeCreateObject(
+                title = "Минимальный мем"
+            )
         )
 
-        // When
         val json = objectMapper.writeValueAsString(original)
-        val deserialized = objectMapper.readValue<CreateMemeRequest>(json)
+        val deserialized = objectMapper.readValue<MemeCreateRequest>(json)
 
-        // Then
-        assertEquals(original.title, deserialized.title, "Title should match")
-        assertNull(deserialized.tags, "Tags should be null")
-        assertNull(deserialized.image, "Image should be null")
+        assertEquals(original.requestType, deserialized.requestType)
+        assertEquals(original.meme?.title, deserialized.meme?.title)
+        assertNull(deserialized.meme?.tags)
+        assertNull(deserialized.meme?.image)
     }
 
     @Test
-    fun `should handle empty tags list`() {
-        // Given
-        val original = CreateMemeRequest(
-            title = "Мем с пустыми тегами",
-            tags = emptyList(),
-            image = null
+    fun `should handle empty tags list in MemeCreateRequest`() {
+        val original = MemeCreateRequest(
+            requestType = "create",
+            meme = MemeCreateObject(
+                title = "Мем с пустыми тегами",
+                tags = emptyList()
+            )
         )
 
-        // When
         val json = objectMapper.writeValueAsString(original)
-        val deserialized = objectMapper.readValue<CreateMemeRequest>(json)
+        val deserialized = objectMapper.readValue<MemeCreateRequest>(json)
 
-        // Then
-        assertEquals(original.title, deserialized.title)
-        assertTrue(deserialized.tags.isNullOrEmpty(), "Tags should be empty")
+        assertEquals(original.requestType, deserialized.requestType)
+        assertEquals(original.meme?.title, deserialized.meme?.title)
+        assertTrue(deserialized.meme?.tags.isNullOrEmpty())
     }
 
     @Test
-    fun `should serialize and deserialize MemeResponse with all fields`() {
-        // Given
+    fun `should serialize and deserialize MemeReadRequest`() {
+        val original = MemeReadRequest(
+            requestType = "read",
+            meme = MemeReadObject(id = "123")
+        )
+
+        val json = objectMapper.writeValueAsString(original)
+        val deserialized = objectMapper.readValue<MemeReadRequest>(json)
+
+        assertEquals(original.requestType, deserialized.requestType)
+        assertEquals(original.meme?.id, deserialized.meme?.id)
+    }
+
+    @Test
+    fun `should serialize and deserialize MemeUpdateRequest`() {
+        val original = MemeUpdateRequest(
+            requestType = "update",
+            meme = MemeUpdateObject(
+                id = "123",
+                title = "Обновлённый мем",
+                tags = listOf("обновление", "тест")
+            )
+        )
+
+        val json = objectMapper.writeValueAsString(original)
+        val deserialized = objectMapper.readValue<MemeUpdateRequest>(json)
+
+        assertEquals(original.requestType, deserialized.requestType)
+        assertEquals(original.meme?.id, deserialized.meme?.id)
+        assertEquals(original.meme?.title, deserialized.meme?.title)
+        assertEquals(original.meme?.tags, deserialized.meme?.tags)
+    }
+
+    @Test
+    fun `should serialize and deserialize MemeDeleteRequest`() {
+        val original = MemeDeleteRequest(
+            requestType = "delete",
+            meme = MemeDeleteObject(id = "123")
+        )
+
+        val json = objectMapper.writeValueAsString(original)
+        val deserialized = objectMapper.readValue<MemeDeleteRequest>(json)
+
+        assertEquals(original.requestType, deserialized.requestType)
+        assertEquals(original.meme?.id, deserialized.meme?.id)
+    }
+
+    @Test
+    fun `should serialize and deserialize MemeSearchRequest`() {
+        val original = MemeSearchRequest(
+            requestType = "search",
+            memeFilter = MemeSearchFilter(
+                searchString = "кот",
+                tags = listOf("смешное", "мем")
+            )
+        )
+
+        val json = objectMapper.writeValueAsString(original)
+        val deserialized = objectMapper.readValue<MemeSearchRequest>(json)
+
+        assertEquals(original.requestType, deserialized.requestType)
+        assertEquals(original.memeFilter?.searchString, deserialized.memeFilter?.searchString)
+        assertEquals(original.memeFilter?.tags, deserialized.memeFilter?.tags)
+    }
+
+    @Test
+    fun `should serialize and deserialize MemeResponseObject with all fields`() {
         val now = OffsetDateTime.now()
-        val original = MemeResponse(
+        val original = MemeResponseObject(
             id = "123",
             title = "Ответный мем",
             tags = listOf("ответ", "тест"),
@@ -92,22 +156,20 @@ class SerializationTest {
             createdAt = now
         )
 
-        // When
         val json = objectMapper.writeValueAsString(original)
-        val deserialized = objectMapper.readValue<MemeResponse>(json)
+        val deserialized = objectMapper.readValue<MemeResponseObject>(json)
 
-        // Then
-        assertEquals(original.id, deserialized.id, "Id should match")
-        assertEquals(original.title, deserialized.title, "Title should match")
-        assertEquals(original.tags, deserialized.tags, "Tags should match")
-        assertEquals(original.imageUrl, deserialized.imageUrl, "ImageUrl should match")
-        assertEquals(original.createdAt?.toEpochSecond(), deserialized.createdAt?.toEpochSecond(), "CreatedAt should match")
+        assertEquals(original.id, deserialized.id)
+        assertEquals(original.title, deserialized.title)
+        assertEquals(original.tags, deserialized.tags)
+        assertEquals(original.imageUrl, deserialized.imageUrl)
+
+        assertEquals(original.createdAt?.toEpochSecond(), deserialized.createdAt?.toEpochSecond())
     }
 
     @Test
-    fun `should handle MemeResponse with null optional fields`() {
-        // Given
-        val original = MemeResponse(
+    fun `should handle MemeResponseObject with null optional fields`() {
+        val original = MemeResponseObject(
             id = null,
             title = "Мем без ID",
             tags = null,
@@ -115,53 +177,53 @@ class SerializationTest {
             createdAt = null
         )
 
-        // When
         val json = objectMapper.writeValueAsString(original)
-        val deserialized = objectMapper.readValue<MemeResponse>(json)
+        val deserialized = objectMapper.readValue<MemeResponseObject>(json)
 
-        // Then
-        assertNull(deserialized.id, "Id should be null")
-        assertEquals(original.title, deserialized.title, "Title should match")
-        assertNull(deserialized.tags, "Tags should be null")
-        assertNull(deserialized.imageUrl, "ImageUrl should be null")
-        assertNull(deserialized.createdAt, "CreatedAt should be null")
+        assertNull(deserialized.id)
+        assertEquals(original.title, deserialized.title)
+        assertNull(deserialized.tags)
+        assertNull(deserialized.imageUrl)
+        assertNull(deserialized.createdAt)
     }
 
     @Test
-    fun `should produce valid JSON format`() {
-        // Given
-        val request = CreateMemeRequest(
-            title = "JSON тест",
-            tags = listOf("json", "формат"),
-            image = "data:image/png;base64,xxx"
+    fun `should produce valid JSON format for MemeCreateRequest`() {
+        val request = MemeCreateRequest(
+            requestType = "create",
+            meme = MemeCreateObject(
+                title = "JSON тест",
+                tags = listOf("json", "формат"),
+                image = "data:image/png;base64,xxx"
+            )
         )
 
-        // When
         val json = objectMapper.writeValueAsString(request)
 
-        // Then
-        assertTrue(json.contains("\"title\":\"JSON тест\""), "JSON should contain title")
-        assertTrue(json.contains("\"tags\":[\"json\",\"формат\"]"), "JSON should contain tags")
-        assertTrue(json.contains("\"image\":\"data:image/png;base64,xxx\""), "JSON should contain image")
+        assertTrue(json.contains("\"requestType\":\"create\""))
+        assertTrue(json.contains("\"title\":\"JSON тест\""))
+        assertTrue(json.contains("\"tags\":[\"json\",\"формат\"]"))
+        assertTrue(json.contains("\"image\":\"data:image/png;base64,xxx\""))
     }
 
     @Test
-    fun `should deserialize from valid JSON string`() {
-        // Given
+    fun `should deserialize MemeCreateRequest from valid JSON string`() {
         val json = """
             {
-                "title": "Из JSON",
-                "tags": ["парсинг", "тест"],
-                "image": "base64data"
+                "requestType": "create",
+                "meme": {
+                    "title": "Из JSON",
+                    "tags": ["парсинг", "тест"],
+                    "image": "base64data"
+                }
             }
         """.trimIndent()
 
-        // When
-        val deserialized = objectMapper.readValue<CreateMemeRequest>(json)
+        val deserialized = objectMapper.readValue<MemeCreateRequest>(json)
 
-        // Then
-        assertEquals("Из JSON", deserialized.title)
-        assertEquals(listOf("парсинг", "тест"), deserialized.tags)
-        assertEquals("base64data", deserialized.image)
+        assertEquals("create", deserialized.requestType)
+        assertEquals("Из JSON", deserialized.meme?.title)
+        assertEquals(listOf("парсинг", "тест"), deserialized.meme?.tags)
+        assertEquals("base64data", deserialized.meme?.image)
     }
 }
