@@ -196,10 +196,6 @@ components:
           type: string
           description: Base64 изображение
 
-    # ============================================
-    # Request models
-    # ============================================
-
     MemeCreateObject:
       allOf:
         - $ref: '#/components/schemas/BaseMeme'
@@ -342,10 +338,6 @@ components:
       allOf:
         - $ref: '#/components/schemas/IResponse'
         - $ref: '#/components/schemas/MemeResponseMulti'
-
-    # ============================================
-    # Debug / Stubs (для тестирования)
-    # ============================================
 
     MemeRequestDebugMode:
       type: string
