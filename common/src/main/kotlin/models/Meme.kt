@@ -1,6 +1,9 @@
 package ru.otus.otuskotlin.common.models
 
+import MemePermissionClient
+import MemeVisibility
 import kotlinx.datetime.Instant
+import ru.otus.otuskotlin.common.NONE
 
 data class Meme(
     var id: MemeId = MemeId.NONE,
@@ -9,7 +12,7 @@ data class Meme(
     var image: String = "",
     var imageUrl: String = "",
     var createdAt: Instant = Instant.NONE,
-    var lock: MemeLock = MemeLock.NONE
+    var lock: MemeLock = MemeLock.NONE,
     var authorId: MemeUserId = MemeUserId.NONE,
     val permissionsClient: MutableSet<MemePermissionClient> = mutableSetOf(),
     var visibility: MemeVisibility = MemeVisibility.NONE,

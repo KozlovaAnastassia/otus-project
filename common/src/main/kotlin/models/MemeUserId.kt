@@ -7,6 +7,6 @@ value class MemeUserId(private val id: String) {
     fun asString(): String = id
 
     companion object {
-        val NONE = MemeId("")
+        val NONE = MemeUserId("")
     }
 }

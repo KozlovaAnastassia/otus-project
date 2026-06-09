@@ -10,12 +10,12 @@ repositories {
 }
 
 dependencies {
-    implementation(project(":api"))
-    implementation("org.jetbrains.kotlinx:kotlinx-datetime:0.5.0")
     implementation(kotlin("stdlib"))
+    implementation(project(":api"))
+    implementation(project(":common"))
 
+    implementation("org.jetbrains.kotlinx:kotlinx-datetime:0.5.0")
     testImplementation("org.junit.jupiter:junit-jupiter:5.10.0")
-    testImplementation("org.assertj:assertj-core:3.24.2")
 }
 
 kotlin {
@@ -29,8 +29,5 @@ tasks.test {
 sourceSets {
     main {
         kotlin.srcDir("src/main/kotlin")
-    }
-    test {
-        kotlin.srcDir("src/test/kotlin")
     }
 }

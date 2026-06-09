@@ -13,6 +13,8 @@ plugins {
 
 include(":api")
 include(":common")
+include(":mappers")
+include(":jakson")
 
 includeBuild("build-plugins")
 includeBuild("learn")

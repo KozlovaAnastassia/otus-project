@@ -2,7 +2,6 @@ package ru.otus.otuskotlin.common
 
 import kotlinx.datetime.Instant
 import ru.otus.otuskotlin.common.models.*
-import ru.otus.otuskotlin.common.repo.IRepoMeme
 import ru.otus.otuskotlin.common.stubs.MemeStubs
 
 data class MemeContext(

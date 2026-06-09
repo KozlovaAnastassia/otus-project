@@ -1,61 +1,15 @@
-package ru.otus.otuskotlin.common.mappers
-
+import kotlinx.datetime.Clock
 import org.junit.jupiter.api.Assertions.*
 import org.junit.jupiter.api.Test
 import ru.otus.otuskotlin.api.v1.models.*
 import ru.otus.otuskotlin.common.MemeContext
 import ru.otus.otuskotlin.common.models.*
 import ru.otus.otuskotlin.common.stubs.MemeStubs
-import kotlinx.datetime.Instant
+import ru.otus.otuskotlin.mappers.v1.fromTransport
+import ru.otus.otuskotlin.mappers.v1.toTransportMeme
+import ru.otus.otuskotlin.mappers.v1.toTransportMemeList
 
 class MemeMapperTest {
-
-    @Test
-    fun `should map MemeCreateObject to internal Meme`() {
-        val request = MemeCreateObject(
-            title = "Тестовый мем",
-            tags = listOf("кот", "прикол"),
-            image = "base64image"
-        )
-
-        val meme = request.toInternal()
-
-        assertEquals(request.title, meme.title)
-        assertEquals(request.tags, meme.tags)
-        assertEquals(MemeId.NONE, meme.id)
-        assertEquals("", meme.image)
-    }
-
-    @Test
-    fun `should map MemeCreateObject with null tags to internal Meme`() {
-        val request = MemeCreateObject(
-            title = "Мем без тегов",
-            tags = null,
-            image = null
-        )
-
-        val meme = request.toInternal()
-
-        assertEquals(request.title, meme.title)
-        assertTrue(meme.tags.isEmpty())
-    }
-
-    @Test
-    fun `should map MemeUpdateObject to internal Meme`() {
-        val request = MemeUpdateObject(
-            id = "123",
-            title = "Обновлённый мем",
-            tags = listOf("обновление", "тест"),
-            image = "newBase64image"
-        )
-
-        val meme = request.toInternal()
-
-        assertEquals(MemeId("123"), meme.id)
-        assertEquals(request.title, meme.title)
-        assertEquals(request.tags, meme.tags)
-        assertEquals(request.image, meme.image)
-    }
 
     @Test
     fun `should map MemeCreateRequest to context`() {
@@ -63,8 +17,8 @@ class MemeMapperTest {
         val request = MemeCreateRequest(
             requestType = "create",
             debug = MemeDebug(
-                mode = MemeRequestDebugMode.PROD,
-                stub = MemeRequestDebugStubs.SUCCESS
+                mode = MemeRequestDebugMode.prod,
+                stub = MemeRequestDebugStubs.success
             ),
             meme = MemeCreateObject(
                 title = "Контекстный мем",
@@ -87,7 +41,7 @@ class MemeMapperTest {
         val context = MemeContext()
         val request = MemeReadRequest(
             requestType = "read",
-            debug = MemeDebug(mode = MemeRequestDebugMode.TEST),
+            debug = MemeDebug(mode = MemeRequestDebugMode.test),
             meme = MemeReadObject(id = "123")
         )
 
@@ -143,7 +97,7 @@ class MemeMapperTest {
         val context = MemeContext()
         val request = MemeSearchRequest(
             requestType = "search",
-            debug = MemeDebug(mode = MemeRequestDebugMode.TEST),
+            debug = MemeDebug(mode = MemeRequestDebugMode.test),
             memeFilter = MemeSearchFilter(
                 searchString = "кот",
                 tags = listOf("смешное", "мем")
@@ -160,28 +114,9 @@ class MemeMapperTest {
     }
 
     @Test
-    fun `should map internal Meme to transport MemeResponseObject`() {
-        val now = Instant.NONE
-        val meme = Meme(
-            id = MemeId("123"),
-            title = "Внутренний мем",
-            tags = listOf("test", "mapper"),
-            image = "/uploads/test.jpg",
-            createdAt = now
-        )
-
-        val response = meme.toTransportMeme()
-
-        assertEquals("123", response?.id)
-        assertEquals(meme.title, response?.title)
-        assertEquals(meme.tags, response?.tags)
-        assertEquals(meme.image, response?.imageUrl)
-    }
-
-    @Test
     fun `should map context to transport MemeCreateResponse`() {
         val context = MemeContext()
-        val now = Instant.NONE
+        val now = Clock.System.now()
         context.memeResponse = Meme(
             id = MemeId("123"),
             title = "Ответный мем",
@@ -194,7 +129,7 @@ class MemeMapperTest {
 
         val response = context.toTransportMeme() as MemeCreateResponse
 
-        assertEquals(ResponseResult.SUCCESS, response.result)
+        assertEquals(ResponseResult.success, response.result)
         assertEquals("123", response.meme?.id)
         assertEquals("Ответный мем", response.meme?.title)
         assertEquals(listOf("response", "test"), response.meme?.tags)
@@ -204,7 +139,7 @@ class MemeMapperTest {
     @Test
     fun `should map context to transport MemeSearchResponse`() {
         val context = MemeContext()
-        context.memesResponse = listOf(
+        context.memesResponse = mutableListOf(
             Meme(id = MemeId("1"), title = "Мем 1"),
             Meme(id = MemeId("2"), title = "Мем 2")
         )

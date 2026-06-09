@@ -3,7 +3,7 @@ package ru.otus.otuskotlin.common.models
 data class MemeFilter(
     var searchString: String = "",
     var ownerId: MemeUserId = MemeUserId.NONE,
-    var dealSide: MemeDealSide = MemeDealSide.NONE,
+    val tags: List<String>  = emptyList()
 ) {
     fun deepCopy(): MemeFilter = copy()
 

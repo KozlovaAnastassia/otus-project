@@ -5,11 +5,3 @@ data class MemeError(
     val field: String = "",
     val message: String = "",
 )
-
-data class MemeRequestId(
-    val value: String = ""
-) {
-    companion object {
-        val NONE = MemeRequestId("")
-    }
-}

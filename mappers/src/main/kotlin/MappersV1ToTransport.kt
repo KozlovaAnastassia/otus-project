@@ -1,5 +1,7 @@
 package ru.otus.otuskotlin.mappers.v1
 
+import MemePermissionClient
+import MemeVisibility
 import ru.otus.otuskotlin.api.v1.models.*
 import ru.otus.otuskotlin.common.MemeContext
 import ru.otus.otuskotlin.common.exceptions.UnknownMemeCommand
@@ -52,24 +54,10 @@ fun Meme.toTransportMeme(): MemeResponseObject? = MemeResponseObject(
     id = id.takeIf { it != MemeId.NONE }?.asString(),
     title = title.takeIf { it.isNotBlank() },
     tags = tags.takeIf { it.isNotEmpty() },
-    imageUrl = imageUrl.takeIf { it.isNotBlank() },
-    createdAt = createdAt.takeIf { it != Instant.NONE }?.toString(),
-    visibility = visibility.toTransportVisibility(),
-    permissions = permissionsClient.toTransportPermissions()
+    imageUrl = (imageUrl.takeIf { it.isNotBlank() } ?: image).takeIf { it.isNotBlank() }
 ).takeIf { !this@toTransportMeme.isEmpty() }
 
 private fun MemeId.toTransportId(): String? = takeIf { it != MemeId.NONE }?.asString()
-
-private fun Set<MemePermissionClient>.toTransportPermissions(): Set<MemePermissions>? = this
-    .map { it.toTransportPermission() }
-    .toSet()
-    .takeIf { it.isNotEmpty() }
-
-private fun MemePermissionClient.toTransportPermission(): MemePermissions = when (this) {
-    MemePermissionClient.READ -> MemePermissions.READ
-    MemePermissionClient.UPDATE -> MemePermissions.UPDATE
-    MemePermissionClient.DELETE -> MemePermissions.DELETE
-}
 
 private fun MemeVisibility.toTransportVisibility(): MemeVisibility? = when (this) {
     MemeVisibility.VISIBLE_TO_OWNER -> MemeVisibility.VISIBLE_TO_OWNER
@@ -90,8 +78,8 @@ private fun MemeError.toTransportError(): ru.otus.otuskotlin.api.v1.models.Error
 )
 
 private fun MemeState.toResult(): ResponseResult? = when (this) {
-    MemeState.RUNNING -> ResponseResult.SUCCESS
-    MemeState.FINISHING -> ResponseResult.SUCCESS
-    MemeState.FAILING -> ResponseResult.ERROR
+    MemeState.RUNNING -> ResponseResult.success
+    MemeState.FINISHING -> ResponseResult.success
+    MemeState.FAILING -> ResponseResult.error
     MemeState.NONE -> null
 }

@@ -149,9 +149,9 @@ class SerializationTest {
     fun `should serialize and deserialize MemeResponseObject with all fields`() {
         val now = OffsetDateTime.now()
         val original = MemeResponseObject(
-            id = "123",
             title = "Ответный мем",
             tags = listOf("ответ", "тест"),
+            id = "123",
             imageUrl = "/uploads/meme123.jpg",
             createdAt = now
         )
@@ -163,18 +163,13 @@ class SerializationTest {
         assertEquals(original.title, deserialized.title)
         assertEquals(original.tags, deserialized.tags)
         assertEquals(original.imageUrl, deserialized.imageUrl)
-
         assertEquals(original.createdAt?.toEpochSecond(), deserialized.createdAt?.toEpochSecond())
     }
 
     @Test
     fun `should handle MemeResponseObject with null optional fields`() {
         val original = MemeResponseObject(
-            id = null,
-            title = "Мем без ID",
-            tags = null,
-            imageUrl = null,
-            createdAt = null
+            title = "Мем без ID"
         )
 
         val json = objectMapper.writeValueAsString(original)

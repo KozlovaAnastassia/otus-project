@@ -20,21 +20,21 @@ private fun String?.toMemeUserId() = this?.let { MemeUserId(it) } ?: MemeUserId.
 private fun String?.toMemeLock() = this?.let { MemeLock(it) } ?: MemeLock.NONE
 
 private fun MemeDebug?.transportToWorkMode(): MemeWorkMode = when (this?.mode) {
-    MemeRequestDebugMode.PROD -> MemeWorkMode.PROD
-    MemeRequestDebugMode.TEST -> MemeWorkMode.TEST
-    MemeRequestDebugMode.STUB -> MemeWorkMode.STUB
+    MemeRequestDebugMode.prod -> MemeWorkMode.PROD
+    MemeRequestDebugMode.test -> MemeWorkMode.TEST
+    MemeRequestDebugMode.stub -> MemeWorkMode.STUB
     null -> MemeWorkMode.PROD
 }
 
 private fun MemeDebug?.transportToStubCase(): MemeStubs = when (this?.stub) {
-    MemeRequestDebugStubs.SUCCESS -> MemeStubs.SUCCESS
-    MemeRequestDebugStubs.NOT_FOUND -> MemeStubs.NOT_FOUND
-    MemeRequestDebugStubs.BAD_ID -> MemeStubs.BAD_ID
-    MemeRequestDebugStubs.BAD_TITLE -> MemeStubs.BAD_TITLE
-    MemeRequestDebugStubs.BAD_TAGS -> MemeStubs.BAD_TAGS
-    MemeRequestDebugStubs.BAD_IMAGE -> MemeStubs.BAD_IMAGE
-    MemeRequestDebugStubs.CANNOT_DELETE -> MemeStubs.CANNOT_DELETE
-    MemeRequestDebugStubs.BAD_SEARCH_STRING -> MemeStubs.BAD_SEARCH_STRING
+    MemeRequestDebugStubs.success -> MemeStubs.SUCCESS
+    MemeRequestDebugStubs.notFound -> MemeStubs.NOT_FOUND
+    MemeRequestDebugStubs.badId -> MemeStubs.BAD_ID
+    MemeRequestDebugStubs.badTitle -> MemeStubs.BAD_TITLE
+    MemeRequestDebugStubs.badTags -> MemeStubs.BAD_TAGS
+    MemeRequestDebugStubs.badImage -> MemeStubs.BAD_IMAGE
+    MemeRequestDebugStubs.cannotDelete -> MemeStubs.CANNOT_DELETE
+    MemeRequestDebugStubs.badSearchString -> MemeStubs.BAD_SEARCH_STRING
     null -> MemeStubs.NONE
 }
 
@@ -93,22 +93,12 @@ private fun MemeSearchFilter?.toInternal(): MemeFilter = MemeFilter(
 private fun MemeCreateObject.toInternal(): Meme = Meme(
     title = this.title ?: "",
     tags = this.tags ?: emptyList(),
-    image = this.image ?: "",
-    visibility = this.visibility.fromTransport()
+    image = this.image ?: ""
 )
 
 private fun MemeUpdateObject.toInternal(): Meme = Meme(
     id = this.id.toMemeId(),
     title = this.title ?: "",
     tags = this.tags ?: emptyList(),
-    image = this.image ?: "",
-    visibility = this.visibility.fromTransport(),
-    lock = this.lock.toMemeLock()
+    image = this.image ?: ""
 )
-
-private fun MemeVisibility?.fromTransport(): MemeVisibility = when (this) {
-    MemeVisibility.VISIBLE_TO_OWNER -> MemeVisibility.VISIBLE_TO_OWNER
-    MemeVisibility.VISIBLE_TO_GROUP -> MemeVisibility.VISIBLE_TO_GROUP
-    MemeVisibility.VISIBLE_PUBLIC -> MemeVisibility.VISIBLE_PUBLIC
-    null -> MemeVisibility.NONE
-}
