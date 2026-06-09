@@ -1,0 +1,374 @@
+openapi: 3.0.3
+info:
+  title: "Meme Service API"
+  description: API для поиска и публикации мемов
+  version: 1.0.0
+
+servers:
+  - url: http://localhost:8080/v1
+
+tags:
+  - name: meme
+    description: Операции с мемами
+
+paths:
+  /meme/create:
+    post:
+      tags:
+        - meme
+      summary: Create meme
+      operationId: memeCreate
+      requestBody:
+        description: Request body
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/MemeCreateRequest'
+        required: true
+      responses:
+        200:
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MemeCreateResponse'
+
+  /meme/read:
+    post:
+      tags:
+        - meme
+      summary: Read meme
+      operationId: memeRead
+      requestBody:
+        description: Request body
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/MemeReadRequest'
+        required: true
+      responses:
+        200:
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MemeReadResponse'
+
+  /meme/update:
+    post:
+      tags:
+        - meme
+      summary: Update meme
+      operationId: memeUpdate
+      requestBody:
+        description: Request body
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/MemeUpdateRequest'
+        required: true
+      responses:
+        200:
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MemeUpdateResponse'
+
+  /meme/delete:
+    post:
+      tags:
+        - meme
+      summary: Delete meme
+      operationId: memeDelete
+      requestBody:
+        description: Request body
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/MemeDeleteRequest'
+        required: true
+      responses:
+        200:
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MemeDeleteResponse'
+
+  /meme/search:
+    post:
+      tags:
+        - meme
+      summary: Search memes
+      operationId: memeSearch
+      requestBody:
+        description: Request body
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/MemeSearchRequest'
+        required: true
+      responses:
+        200:
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MemeSearchResponse'
+
+components:
+  schemas:
+    IRequest:
+      type: object
+      description: Базовый интерфейс для всех запросов
+      properties:
+        requestType:
+          type: string
+          description: Поле-дескриминатор для вычисления типа запроса
+          example: create
+      discriminator:
+        propertyName: requestType
+        mapping:
+          create: '#/components/schemas/MemeCreateRequest'
+          read:   '#/components/schemas/MemeReadRequest'
+          update: '#/components/schemas/MemeUpdateRequest'
+          delete: '#/components/schemas/MemeDeleteRequest'
+          search: '#/components/schemas/MemeSearchRequest'
+
+    IResponse:
+      type: object
+      description: Базовый интерфейс для всех ответов
+      properties:
+        responseType:
+          type: string
+          description: Поле-дескриминатор для вычисления типа ответа
+          example: create
+        result:
+          $ref: '#/components/schemas/ResponseResult'
+        errors:
+          type: array
+          items:
+            $ref: '#/components/schemas/Error'
+      discriminator:
+        propertyName: responseType
+        mapping:
+          create: '#/components/schemas/MemeCreateResponse'
+          read:   '#/components/schemas/MemeReadResponse'
+          update: '#/components/schemas/MemeUpdateResponse'
+          delete: '#/components/schemas/MemeDeleteResponse'
+          search: '#/components/schemas/MemeSearchResponse'
+
+    ResponseResult:
+      type: string
+      enum:
+        - success
+        - error
+
+    Error:
+      type: object
+      properties:
+        code:
+          type: string
+        group:
+          type: string
+        field:
+          type: string
+        message:
+          type: string
+    MemeId:
+      type: string
+      description: Идентификатор мема
+
+    BaseMeme:
+      type: object
+      description: Объект описывает свойства мема, одинаковые для create и update
+      properties:
+        title:
+          type: string
+          description: Название мема
+        tags:
+          type: array
+          description: Теги мема
+          items:
+            type: string
+        image:
+          type: string
+          description: Base64 изображение
+
+    MemeCreateObject:
+      allOf:
+        - $ref: '#/components/schemas/BaseMeme'
+
+    MemeCreateRequest:
+      allOf:
+        - $ref: '#/components/schemas/IRequest'
+        - $ref: '#/components/schemas/MemeRequestDebug'
+        - type: object
+          properties:
+            meme:
+              $ref: '#/components/schemas/MemeCreateObject'
+
+    MemeReadObject:
+      allOf:
+        - type: object
+          properties:
+            id:
+              $ref: '#/components/schemas/MemeId'
+
+    MemeReadRequest:
+      allOf:
+        - $ref: '#/components/schemas/IRequest'
+        - $ref: '#/components/schemas/MemeRequestDebug'
+        - type: object
+          properties:
+            meme:
+              $ref: '#/components/schemas/MemeReadObject'
+
+    MemeUpdateObject:
+      allOf:
+        - $ref: '#/components/schemas/BaseMeme'
+        - type: object
+          properties:
+            id:
+              $ref: '#/components/schemas/MemeId'
+
+    MemeUpdateRequest:
+      allOf:
+        - $ref: '#/components/schemas/IRequest'
+        - $ref: '#/components/schemas/MemeRequestDebug'
+        - type: object
+          properties:
+            meme:
+              $ref: '#/components/schemas/MemeUpdateObject'
+
+    MemeDeleteObject:
+      allOf:
+        - type: object
+          properties:
+            id:
+              $ref: '#/components/schemas/MemeId'
+
+    MemeDeleteRequest:
+      allOf:
+        - $ref: '#/components/schemas/IRequest'
+        - $ref: '#/components/schemas/MemeRequestDebug'
+        - type: object
+          properties:
+            meme:
+              $ref: '#/components/schemas/MemeDeleteObject'
+
+    MemeSearchFilter:
+      type: object
+      description: Набор фильтров для поиска
+      properties:
+        searchString:
+          type: string
+          description: Поисковая строка (ищется в названии и тегах)
+        tags:
+          type: array
+          description: Фильтр по тегам
+          items:
+            type: string
+
+    MemeSearchRequest:
+      allOf:
+        - $ref: '#/components/schemas/IRequest'
+        - $ref: '#/components/schemas/MemeRequestDebug'
+        - type: object
+          properties:
+            memeFilter:
+              $ref: '#/components/schemas/MemeSearchFilter'
+
+    MemeResponseObject:
+      allOf:
+        - $ref: '#/components/schemas/BaseMeme'
+        - type: object
+          description: Объект, который возвращается в ответе бэкенда
+          properties:
+            id:
+              $ref: '#/components/schemas/MemeId'
+            imageUrl:
+              type: string
+              description: URL изображения
+            createdAt:
+              type: string
+              format: date-time
+              description: Дата создания
+
+    MemeResponseSingle:
+      allOf:
+        - type: object
+          description: Ответ с одним объектом мема
+          properties:
+            meme:
+              $ref: '#/components/schemas/MemeResponseObject'
+
+    MemeResponseMulti:
+      allOf:
+        - type: object
+          description: Список найденных объектов
+          properties:
+            memes:
+              type: array
+              items:
+                $ref: '#/components/schemas/MemeResponseObject'
+
+    MemeCreateResponse:
+      allOf:
+        - $ref: '#/components/schemas/IResponse'
+        - $ref: '#/components/schemas/MemeResponseSingle'
+
+    MemeReadResponse:
+      allOf:
+        - $ref: '#/components/schemas/IResponse'
+        - $ref: '#/components/schemas/MemeResponseSingle'
+
+    MemeUpdateResponse:
+      allOf:
+        - $ref: '#/components/schemas/IResponse'
+        - $ref: '#/components/schemas/MemeResponseSingle'
+
+    MemeDeleteResponse:
+      allOf:
+        - $ref: '#/components/schemas/IResponse'
+        - $ref: '#/components/schemas/MemeResponseSingle'
+
+    MemeSearchResponse:
+      allOf:
+        - $ref: '#/components/schemas/IResponse'
+        - $ref: '#/components/schemas/MemeResponseMulti'
+
+    MemeRequestDebugMode:
+      type: string
+      enum:
+        - prod
+        - test
+        - stub
+
+    MemeRequestDebug:
+      type: object
+      properties:
+        debug:
+          $ref: '#/components/schemas/MemeDebug'
+
+    MemeDebug:
+      type: object
+      properties:
+        mode:
+          $ref: '#/components/schemas/MemeRequestDebugMode'
+        stub:
+          $ref: '#/components/schemas/MemeRequestDebugStubs'
+
+    MemeRequestDebugStubs:
+      type: string
+      description: Перечисления всех стабов
+      enum:
+        - success
+        - notFound
+        - badId
+        - badTitle
+        - badTags
+        - badImage
+        - cannotDelete
+        - badSearchString
