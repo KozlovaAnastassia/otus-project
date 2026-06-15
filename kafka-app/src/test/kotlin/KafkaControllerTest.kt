@@ -56,15 +56,12 @@ class KafkaControllerTest {
             app.close()
         }
 
-        // Настраиваем offsets
         val startOffsets: MutableMap<TopicPartition, Long> = mutableMapOf()
         startOffsets[TopicPartition(inputTopic, PARTITION)] = 0L
         consumer.updateBeginningOffsets(startOffsets)
 
-        // Запускаем обработку
         app.start()
 
-        // Проверяем результат
         val sentMessage = producer.history().first()
         val response = apiV1ResponseDeserialize<MemeCreateResponse>(sentMessage.value())
 

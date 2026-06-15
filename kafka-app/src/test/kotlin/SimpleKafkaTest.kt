@@ -9,7 +9,7 @@ import java.time.Duration
 import java.time.Instant
 import java.util.*
 
-@Disabled("Требует запущенной Kafka (docker-compose up -d)")
+@Disabled("требуется docker-compose up -d")
 class SimpleKafkaTest {
     private val topicName = "meme-v1-in"
 
