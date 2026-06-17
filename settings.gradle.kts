@@ -15,6 +15,8 @@ include(":api")
 include(":common")
 include(":mappers")
 include(":jakson")
+include(":ktor-app")
+include(":kafka-app")
 
 includeBuild("build-plugins")
 includeBuild("learn")
