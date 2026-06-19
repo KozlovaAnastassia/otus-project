@@ -19,4 +19,9 @@ data class MemeContext(
 
     var memeResponse: Meme = Meme(),
     var memesResponse: MutableList<Meme> = mutableListOf(),
+
+    var memeValidating: Meme = Meme(),
+    var memeValidated: Meme = Meme(),
+    var memeFilterValidating: MemeFilter = MemeFilter(),
+    var memeFilterValidated: MemeFilter = MemeFilter(),
 )
