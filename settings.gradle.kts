@@ -17,6 +17,8 @@ include(":mappers")
 include(":jakson")
 include(":ktor-app")
 include(":kafka-app")
+include(":libs")
+include(":biz")
 
 includeBuild("build-plugins")
 includeBuild("learn")
