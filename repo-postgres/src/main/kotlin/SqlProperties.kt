@@ -5,7 +5,7 @@ data class SqlProperties(
     val port: Int = 5432,
     val user: String = "postgres",
     val password: String = "postgres",
-    val database: String = "memes",
+    val database: String = "postgres",
     val schema: String = "public",
     val table: String = "memes",
 ) {

@@ -41,14 +41,14 @@ class RepoMemeSql(
 
         memeTable.insert {
             it[memeTable.id] = id
-            it[memeTable.title] = newMeme.title.takeIf { it.isNotBlank() }
-            it[memeTable.tags] = newMeme.tags.joinToString(",")
-            it[memeTable.image] = newMeme.image.takeIf { it.isNotBlank() }
-            it[memeTable.imageUrl] = newMeme.imageUrl.takeIf { it.isNotBlank() }
-            it[memeTable.createdAt] = newMeme.createdAt.toString()
-            it[memeTable.authorId] = newMeme.authorId.asString().takeIf { it.isNotBlank() }
-            it[memeTable.lock] = newMeme.lock.asString()
-            it[memeTable.visibility] = newMeme.visibility
+            it[title] = newMeme.title.takeIf { it.isNotBlank() }
+            it[tags] = newMeme.tags.joinToString(",")
+            it[image] = newMeme.image.takeIf { it.isNotBlank() }
+            it[imageUrl] = newMeme.imageUrl.takeIf { it.isNotBlank() }
+            it[createdAt] = newMeme.createdAt.toString()
+            it[authorId] = newMeme.authorId.asString().takeIf { it.isNotBlank() }
+            it[lock] = newMeme.lock.asString()
+            it[visibility] = newMeme.visibility.name
         }
         newMeme
     }
@@ -120,7 +120,7 @@ class RepoMemeSql(
                         it[memeTable.imageUrl] = meme.imageUrl.takeIf { it.isNotBlank() }
                         it[memeTable.authorId] = meme.authorId.asString().takeIf { it.isNotBlank() }
                         it[memeTable.lock] = meme.lock.takeIf { it != MemeLock.NONE }?.asString() ?: randomUuid()
-                        it[memeTable.visibility] = meme.visibility
+                        it[memeTable.visibility] = meme.visibility.name
                     }
 
                     memeTable.select { memeTable.id eq id }

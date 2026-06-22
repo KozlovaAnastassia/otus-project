@@ -15,14 +15,15 @@ application {
 }
 
 dependencies {
+    // Ktor
     implementation("io.ktor:ktor-server-core-jvm:2.3.7")
     implementation("io.ktor:ktor-server-netty-jvm:2.3.7")
     implementation("io.ktor:ktor-server-content-negotiation:2.3.7")
     implementation("io.ktor:ktor-serialization-jackson:2.3.7")
-    implementation("io.ktor:ktor-server-call-logging:2.3.7")
 
-    // Логирование
+    // Логи
     implementation("ch.qos.logback:logback-classic:1.4.11")
+    implementation("io.ktor:ktor-server-call-logging:2.3.7")
 
     // модули
     implementation(project(":api"))
@@ -30,20 +31,23 @@ dependencies {
     implementation(project(":mappers"))
     implementation(project(":biz"))
     implementation(project(":repo-inmemory"))
+    implementation(project(":repo-postgres"))
 
-    // Kotlinx datetime
+    // База
+    implementation("org.postgresql:postgresql:42.7.1")
+
+    // Дата и Jackson
     implementation("org.jetbrains.kotlinx:kotlinx-datetime:0.5.0")
-
-    // Jackson
     implementation("com.fasterxml.jackson.core:jackson-databind:2.16.0")
     implementation("com.fasterxml.jackson.module:jackson-module-kotlin:2.16.0")
     implementation("com.fasterxml.jackson.datatype:jackson-datatype-jsr310:2.16.0")
 
+    // Конфиг
+    implementation("com.typesafe:config:1.4.2")
+
     // Тесты
     testImplementation("io.ktor:ktor-server-tests-jvm:2.3.7")
     testImplementation("org.junit.jupiter:junit-jupiter:5.10.0")
-
-    implementation("io.ktor:ktor-server-config-yaml:2.3.7")
 }
 
 kotlin {

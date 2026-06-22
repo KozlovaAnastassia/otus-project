@@ -15,7 +15,7 @@ class MemeTable(tableName: String) : Table(tableName) {
     val createdAt = text(SqlFields.CREATED_AT).nullable()
     val authorId = text(SqlFields.AUTHOR_ID).nullable()
     val lock = text(SqlFields.LOCK)
-    val visibility = visibilityEnumeration(SqlFields.VISIBILITY)
+    val visibility = text(SqlFields.VISIBILITY).nullable()  // ← изменили на text
 
     override val primaryKey = PrimaryKey(id)
 
@@ -28,7 +28,7 @@ class MemeTable(tableName: String) : Table(tableName) {
         createdAt = res[createdAt]?.let { kotlinx.datetime.Instant.parse(it) } ?: kotlinx.datetime.Instant.NONE,
         authorId = res[authorId]?.let { MemeUserId(it) } ?: MemeUserId.NONE,
         lock = MemeLock(res[lock]),
-        visibility = res[visibility]
+        visibility = res[visibility]?.let { MemeVisibility.valueOf(it) } ?: MemeVisibility.NONE
     )
 
     fun UpdateBuilder<*>.to(meme: Meme, randomUuid: () -> String) {
@@ -40,6 +40,6 @@ class MemeTable(tableName: String) : Table(tableName) {
         this[createdAt] = meme.createdAt.toString()
         this[authorId] = meme.authorId.asString()
         this[lock] = meme.lock.takeIf { it != MemeLock.NONE }?.asString() ?: randomUuid()
-        this[visibility] = meme.visibility
+        this[visibility] = meme.visibility.name  // ← сохраняем как строку
     }
 }
