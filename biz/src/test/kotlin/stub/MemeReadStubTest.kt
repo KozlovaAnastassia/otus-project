@@ -35,7 +35,7 @@ class MemeReadStubTest {
             state = MemeState.NONE
             workMode = MemeWorkMode.TEST
             memeRequest = Meme(
-                id = MemeId("!@#$"),  // ← невалидный формат
+                id = MemeId("!@#$"),
                 title = "Valid Title"
             )
         }

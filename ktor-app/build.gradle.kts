@@ -28,6 +28,8 @@ dependencies {
     implementation(project(":api"))
     implementation(project(":common"))
     implementation(project(":mappers"))
+    implementation(project(":biz"))
+    implementation(project(":repo-inmemory"))
 
     // Kotlinx datetime
     implementation("org.jetbrains.kotlinx:kotlinx-datetime:0.5.0")
@@ -40,6 +42,8 @@ dependencies {
     // Тесты
     testImplementation("io.ktor:ktor-server-tests-jvm:2.3.7")
     testImplementation("org.junit.jupiter:junit-jupiter:5.10.0")
+
+    implementation("io.ktor:ktor-server-config-yaml:2.3.7")
 }
 
 kotlin {

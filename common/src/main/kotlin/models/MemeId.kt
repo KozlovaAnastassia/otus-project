@@ -1,6 +1,7 @@
 package ru.otus.otuskotlin.common.models
 
 import kotlin.jvm.JvmInline
+import kotlin.random.Random
 
 @JvmInline
 value class MemeId(private val id: String) {
@@ -11,5 +12,10 @@ value class MemeId(private val id: String) {
 
     companion object {
         val NONE = MemeId("")
+
+        fun generate(): MemeId = MemeId(
+            Random.nextLong().toString(36) +
+                    Random.nextLong().toString(36)
+        )
     }
 }

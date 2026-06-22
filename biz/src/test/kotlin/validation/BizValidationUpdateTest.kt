@@ -4,12 +4,14 @@ import kotlinx.coroutines.test.runTest
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.Test
+import ru.otus.otuskotlin.biz.validation.TestRepo
 import ru.otus.otuskotlin.common.MemeContext
 import ru.otus.otuskotlin.common.models.*
+import ru.otus.otuskotlin.repo.inmemory.MemeRepoInMemory
 
 class ValidationUpdateTest {
 
-    private val processor = MemeProcessor()
+    private val processor = MemeProcessor(TestRepo())
 
     @Test
     fun correctTitle() = runTest {
@@ -23,26 +25,28 @@ class ValidationUpdateTest {
             )
         }
         processor.exec(ctx)
+
         ctx.errors.forEach { println("error: $it") }
         assertEquals(0, ctx.errors.size)
         assertEquals("Valid Title", ctx.memeValidated.title)
     }
 
-    @Test
-    fun trimTitle() = runTest {
-        val ctx = MemeContext().apply {
-            command = MemeCommand.UPDATE
-            state = MemeState.NONE
-            workMode = MemeWorkMode.TEST
-            memeRequest = Meme(
-                id = MemeId("123"),
-                title = "  Trimmed Title  "
-            )
+        @Test
+        fun trimTitle() = runTest {
+            val ctx = MemeContext().apply {
+                command = MemeCommand.UPDATE
+                state = MemeState.NONE
+                workMode = MemeWorkMode.TEST
+                memeRequest = Meme(
+                    id = MemeId("123"),
+                    title = "  Trimmed Title  "
+                )
+            }
+            processor.exec(ctx)
+
+            assertEquals(0, ctx.errors.size)
+            assertEquals("Trimmed Title", ctx.memeValidated.title)
         }
-        processor.exec(ctx)
-        assertEquals(0, ctx.errors.size)
-        assertEquals("Trimmed Title", ctx.memeValidated.title)
-    }
 
     @Test
     fun emptyTitle() = runTest {
