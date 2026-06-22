@@ -29,11 +29,8 @@ abstract class RepoMemeReadTest {
                 val data = result.data
                 assertTrue(data.isNotEmpty(), "Created meme should be returned")
                 createdId = data.first().id.asString()
-                println("Created meme with id: $createdId")
             }
             else -> {
-                println("Failed to create meme: ${result.errors}")
-                // Если create не сработал, пропускаем тест
                 createdId = "skip"
             }
         }
@@ -42,7 +39,6 @@ abstract class RepoMemeReadTest {
     @Test
     fun readShouldReturnExistingMeme() = runTest {
         if (createdId == "skip") {
-            println("Skipping test because create failed")
             return@runTest
         }
         assertNotNull(createdId, "createdId should not be null")

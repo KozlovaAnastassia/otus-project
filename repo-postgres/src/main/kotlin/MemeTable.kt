@@ -15,7 +15,7 @@ class MemeTable(tableName: String) : Table(tableName) {
     val createdAt = text(SqlFields.CREATED_AT).nullable()
     val authorId = text(SqlFields.AUTHOR_ID).nullable()
     val lock = text(SqlFields.LOCK)
-    val visibility = text(SqlFields.VISIBILITY).nullable()  // ← изменили на text
+    val visibility = text(SqlFields.VISIBILITY).nullable()
 
     override val primaryKey = PrimaryKey(id)
 
@@ -40,6 +40,6 @@ class MemeTable(tableName: String) : Table(tableName) {
         this[createdAt] = meme.createdAt.toString()
         this[authorId] = meme.authorId.asString()
         this[lock] = meme.lock.takeIf { it != MemeLock.NONE }?.asString() ?: randomUuid()
-        this[visibility] = meme.visibility.name  // ← сохраняем как строку
+        this[visibility] = meme.visibility.name
     }
 }

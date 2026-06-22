@@ -25,8 +25,6 @@ class ValidationUpdateTest {
             )
         }
         processor.exec(ctx)
-
-        ctx.errors.forEach { println("error: $it") }
         assertEquals(0, ctx.errors.size)
         assertEquals("Valid Title", ctx.memeValidated.title)
     }
