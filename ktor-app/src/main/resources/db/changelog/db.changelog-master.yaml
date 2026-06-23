@@ -1,0 +1,43 @@
+databaseChangeLog:
+  - changeSet:
+      id: 1
+      author: anastasia
+      changes:
+        - createTable:
+            tableName: memes
+            columns:
+              - column:
+                  name: id
+                  type: TEXT
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: title
+                  type: TEXT
+              - column:
+                  name: tags
+                  type: TEXT
+              - column:
+                  name: image
+                  type: TEXT
+              - column:
+                  name: image_url
+                  type: TEXT
+              - column:
+                  name: created_at
+                  type: TEXT
+              - column:
+                  name: author_id
+                  type: TEXT
+              - column:
+                  name: lock
+                  type: TEXT
+              - column:
+                  name: visibility
+                  type: TEXT
+      preConditions:
+        - onFail: MARK_RAN
+        - not:
+            - tableExists:
+                tableName: memes

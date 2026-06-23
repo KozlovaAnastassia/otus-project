@@ -21,8 +21,3 @@ include(":libs")
 include(":biz")
 include(":repo-inmemory")
 include(":repo-postgres")
-
-includeBuild("build-plugins")
-includeBuild("learn")
-includeBuild("project")
-include("repo-postgres")

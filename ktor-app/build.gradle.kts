@@ -35,6 +35,7 @@ dependencies {
 
     // База
     implementation("org.postgresql:postgresql:42.7.1")
+    implementation("org.liquibase:liquibase-core:4.25.1")
 
     // Дата и Jackson
     implementation("org.jetbrains.kotlinx:kotlinx-datetime:0.5.0")
