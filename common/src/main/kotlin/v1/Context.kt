@@ -2,6 +2,7 @@ package ru.otus.otuskotlin.common
 
 import kotlinx.datetime.Instant
 import ru.otus.otuskotlin.common.models.*
+import ru.otus.otuskotlin.common.repo.IMemeRepo
 import ru.otus.otuskotlin.common.stubs.MemeStubs
 
 data class MemeContext(
@@ -19,6 +20,7 @@ data class MemeContext(
 
     var memeResponse: Meme = Meme(),
     var memesResponse: MutableList<Meme> = mutableListOf(),
+    var repo: IMemeRepo = IMemeRepo.NONE,
 
     var memeValidating: Meme = Meme(),
     var memeValidated: Meme = Meme(),

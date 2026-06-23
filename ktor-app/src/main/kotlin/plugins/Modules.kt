@@ -16,9 +16,20 @@ fun Application.configureSerialization() {
             disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS)
         }
     }
+}
 
+fun Application.installCallLogging() {
     install(CallLogging) {
         level = Level.INFO
         filter { call -> call.request.path().startsWith("/v1") }
+    }
+}
+
+fun Application.installContentNegotiation() {
+    install(ContentNegotiation) {
+        jackson {
+            registerModule(JavaTimeModule())
+            disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS)
+        }
     }
 }
